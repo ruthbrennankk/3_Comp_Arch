@@ -1,0 +1,41 @@
+
+;min( int a, int b, int c)
+min: 		add r26, r0, r1 ; use r1 for local v (function result returned in r1)
+		sub r27, r1, r0 {C} ; b < v
+		jge min0 ;
+		xor r0, r0, r0 ; nop in delay slot
+		add r27, r0, r1 ; v = b
+min0: 		sub r28, r1, r0 {C} ; c < v
+		jge min1 ;
+		xor r0, r0, r0 ; nop in delay slot
+		add r28, r0, r1 ; v = b
+min1: 		ret r25, 0 ; return
+		xor r0, r0, r0 ; nop in delay slot
+	
+
+
+;int p (int i, int j, int k, int l)
+p: 		add r9, r0, r10 ; set up 1st parameter (g)
+		add r26, r0, r11 ; set up 2nd parameter (i)
+		callr r25, min ; call min (save return address in r25)
+		add r27, r0, r12 ; set up 3rd parameter (j) in delay slot
+		add r1, r0, r10 ; set up 1st parameter (result returned from min in r1)
+		add r28, r0, r11 ; set up 2nd parameter (k)
+		callr r25, min ; call min (save return address in r25)
+		add r29, r0. r12 ; set up 3rd parameter (l) in delay slot
+		ret r25, 0 ; return result in r1
+		xor r0, r0, r0 ; nop in delay slot
+
+
+;int gcd( int a, int b)
+gcd: 		sub r27, r0, r0 {c} ; b == 0
+		jeq gcd0 ; jump equal
+		add r26, r0, r1 ; set result (a) can be executed if test true or false
+		add r26, r0, r10 ; set up 1st parameter (a)
+		callr r25, mod ; call mod
+		add r27, r0, r10 ; set up 2nd parameter (b) in delay slot
+		add r27, r0, r10 ; set up 1st parameter (b)
+		callr r25, gcd ; recursively call gcd(b, a % b)
+		add r1, r0, r11 ; set up 2nd parameter (a % b) in delay slot
+		gcd0: ret r25, 0 ; return
+		xor r0, r0, r0 ; nop in delay slot

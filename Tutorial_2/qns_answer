@@ -1,0 +1,4 @@
+Write a function qns() which simply calls printf(“qns\n”) with and without allocating shadow space. Determine what happens when qns() is executed with and without shadow space (provide a screen snapshot).
+
+When the shadow space is not allocated an exception is thrown - visual studio claims that stack.cpp is not found and that a breakpoint has been triggered. This I believe is due to the microsoft convention dictating that shadow space should be allocated and consequently printf expecting it to be there. So when printf tried to access/use the stack it threw an error because it attempted to access space on the stack that was not there.
+When shadow space is allocated the everything runs smoothly as convention is followed thus when the stack is accessed there is no issue.
